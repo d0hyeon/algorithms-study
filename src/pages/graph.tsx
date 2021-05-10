@@ -11,6 +11,8 @@ const MOCK_LOCALS = [
 ]
 
 const MOCK_ROUTES: [string, string, number][] = [
+  ['강남', '신림', 3],
+  ['강남', '용산', 4],
   ['건대', '노원', 3],
   ['건대', '강남', 4],
   ['노원', '하남', 4],
