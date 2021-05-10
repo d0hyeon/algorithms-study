@@ -48,6 +48,7 @@ const Layout = styled.div`
     flex: 1 1 auto;
     overflow-y: auto;
     padding: 20px;
+    height: 100%;
   }
 `
 
