@@ -169,7 +169,7 @@ const GraphPage: React.FC = () => {
                 <InpuUnit>→</InpuUnit>
                 <Select value={searchTo} options={locals} disabled={searchFrom} onChange={handleChangeSearchTo} />
               </InputEntity>
-              <Button onClick={searchRoute} disabled={!searchFrom || !searchTo}>경로 추가</Button>
+              <Button onClick={searchRoute} disabled={!searchFrom || !searchTo}>경로 찾기</Button>
             </InputFields>
         </Header>
         <Ul>
