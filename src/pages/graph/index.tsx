@@ -6,29 +6,24 @@ import { Input } from '@src/components/styles/input';
 import Select, { Option } from '@src/components/Select';
 import styled from '@emotion/styled';
 
-const MOCK_LOCALS = [
-  '용산', '노원', '강남', '역삼', '인천', '신림', '하남', '혜화', '건대', '종로'
+const MOCK_STATIONS = [
+  '강남', '선릉', '(신)용산', '건대', '노원', '신림', '혜화', '홍대', '합정',
+  '강남구청', '명동', '이태원'
 ]
 
 const MOCK_ROUTES: [string, string, number][] = [
-  ['강남', '신림', 3],
-  ['강남', '용산', 4],
-  ['건대', '노원', 3],
-  ['건대', '강남', 4],
-  ['노원', '하남', 4],
-  ['노원', '건대', 3],
-  ['노원', '강남', 6],
-  ['노원', '용산', 5], 
-  ['용산', '혜화', 6],
-  ['용산', '종로', 4],
-  ['용산', '강남', 4],
-  ['용산', '신림', 2],
-  ['종로', '혜화', 2],
-  ['종로', '노원', 3],
-  ['신림', '인천', 3],
-  ['신림', '강남', 3],
-  ['혜화', '노원', 1],
-  ['혜화', '하남', 6],
+  ['강남', '선릉', 2], ['강남', '신림', 8], ['강남', '건대', 10], ['강남', '홍대', 17], ['강남', '합정', 16],
+  ['선릉', '강남', 2], ['선릉', '강남구청', 2],
+  ['(신)용산', '혜화', 16], ['(신)용산', '홍대', 4],
+  ['건대', '노원', 14], ['건대', '강남', 10], ['건대', '선릉', 8], ['건대', '신림', 18], ['건대', '강남구청', 3], ['건대', '홍대', 16],
+  ['노원', '건대', 14], ['노원', '혜화', 9],  ['노원', '강남구청', 17],
+  ['신림', '강남', 8], ['신림', '선릉', 10], ['신림', '합정', 8], ['신림', '홍대', 9], ['신림', '건대입구', 18],
+  ['홍대', '강남', 17], ['홍대', '합정', 1], ['홍대', '신림', 9], ['홍대', '선릉', 18], ['홍대', '건대', 16], ['홍대', '(신)용산', 4],
+  ['합정', '홍대', 1], ['합정', '이태원', 8], ['합정', '강남', 16], ['합정', '신림', 8], ['합정', '선릉', 19], ['합정', '건대', 17],
+  ['강남구청', '건대', 3], ['강남구청', '선릉', 2], ['강남구청', '노원', 17],
+  ['명동', '혜화', 4], ['명동', '(신)용산', 5], ['명동', '노원', 13],
+  ['혜화', '명동', 4], ['혜화', '(신)용산', 9], ['혜화', '노원', 9],
+  ['이태원', '합정', 14]
 ]
 
 const GraphPage: React.FC = () => {
@@ -40,7 +35,7 @@ const GraphPage: React.FC = () => {
   const [searchTo, setSearchTo] = React.useState<string>('');
 
   const [locals, setLocals] = React.useState<Option[]>(() => {
-    return MOCK_LOCALS.map((value) => {
+    return MOCK_STATIONS.map((value) => {
       graph.addVertex(value);
       return {text: value, value};
     })
@@ -117,21 +112,21 @@ const GraphPage: React.FC = () => {
       </Header>
       <Section>
         <Header>
-          <H2>배송  지역</H2>
+          <H2>지하철 역</H2>
           <P>
-            쿠팡맨이 열심히 배송을 하고있다. <br/>
-            여러 지역에 분포 된 배송지역의 경로를 찾아보자 
+            지하철 역이 나열되어 있다. 해당 역들은 동일한 노선끼리 이동 할 수 있으며, 환승역에서만 다른 노선으로 갈아 탈 수 있다.<br/>
+            역들을 설정하고 갈 수 있는 경로를 설정 한 뒤 출발지부터 도착지까지의 경로를 알아보자 
           </P>
         </Header>
       </Section>
       <HalfSection>
         <Article>
           <Header>
-            <H3>지역 목록</H3>
+            <H3>역 목록</H3>
             <InputFields>
               <InputEntity> 
                 <Input value={inputValue} onChange={handleInputChange} />
-                <Button onClick={appendVertex} disabled={!inputValue}>지역 추가</Button>
+                <Button onClick={appendVertex} disabled={!inputValue}>역 추가</Button>
               </InputEntity>
             </InputFields>
           </Header>
@@ -153,13 +148,30 @@ const GraphPage: React.FC = () => {
               <Button onClick={appendArc} disabled={!arcFrom || !arcTo}>경로 추가</Button>
             </InputFields>
           </Header>
-          <Ul>
-            {arcs.map(([from, to]) => (
-              <li key={`${from}-${to}`}>
-                {from} → {to}
-              </li>
-            ))}
-          </Ul>
+          <HalfSection>
+            {Array(Math.ceil(arcs.length/20)).fill(0).map((_, idx) => {
+              let max = (idx+1) * 20;
+              const min = max - 20;
+              if(max > arcs.length) {
+                max = arcs.length;
+              }
+              
+              return (
+                <article key={idx}>
+                  <Ul>
+                    {Array(max-min).fill('').map((_, i) => {
+                      const [from, to] = arcs[min + i];
+                      return (
+                        <li key={`${from}-${to}`}>
+                          {from} → {to}
+                        </li>
+                      )
+                    })}
+                  </Ul>
+                </article>
+              )
+            })}
+          </HalfSection>
         </Article>
       </HalfSection>
       <Section>
