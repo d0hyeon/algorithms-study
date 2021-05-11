@@ -176,7 +176,7 @@ const GraphPage: React.FC = () => {
       </HalfSection>
       <Section>
         <Header>
-          <H2>경로 찾기</H2>
+          <H2>모든 경로 찾기</H2>
           <InputFields>
               <InputEntity>
                 <Select value={searchFrom} options={locals} disabled={searchTo} onChange={handleChangeSearchFrom} />
@@ -191,7 +191,7 @@ const GraphPage: React.FC = () => {
             <li key={idx}>
               {route.map(({text, distance}, idx) => (
                 <span key={`${text}-${distance.toString()}`}>
-                  {!!idx && '→'} {text} (총 거리: {distance}) 
+                  {!!idx && '→'} {text} (총 {distance}개역)
                 </span>
               ))}
             </li>
