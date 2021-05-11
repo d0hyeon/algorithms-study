@@ -159,27 +159,14 @@ class Graph<T = any> {
       vertex,
       distance,
       child: vertex.arcs
-        .map((arc) => {
-          arc.inTree = true;
-          return this._getVertexRoute(
-            arc.destination,
-            findKey,
-            distance + arc.distance,
-            [...history]
-          );
-        })
-        .filter((v) => {
-          if (!v) {
-            return false;
-          }
-          if (!v.child) {
-            return true;
-          }
-          if (v.child && !v.child.length) {
-            return false;
-          }
-          return true;
-        }) as VertexRoute[]
+        .map((arc) => this._getVertexRoute(
+          arc.destination, 
+          findKey, 
+          distance + 
+          arc.distance, 
+          [...history]
+        ))
+        .filter((route) => route && (!route.child || !!route.child.length)) as VertexRoute[]
     };
   }
   searchRoute(fromKey: string, toKey: string): VertexRoute | undefined {
