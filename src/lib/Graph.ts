@@ -206,9 +206,10 @@ class Graph<T = any> {
           const { child, ...rest } = vertexRoute;
           arr[i].push(rest);
           const originArr = arr[i];
+          let newIdx = i;
           child.forEach((obj, idx) => {
             const newArr = [...originArr];
-            const newIdx = i + idx;
+            newIdx += idx;
             arr[newIdx] = newArr;
             flat(arr, newIdx, obj);
           });
