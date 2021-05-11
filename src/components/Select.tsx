@@ -1,4 +1,4 @@
-import React, { MouseEvent, MouseEventHandler, EventHandler } from 'react';
+import React, { MouseEventHandler } from 'react';
 import styled from '@emotion/styled';
 
 export interface Option {
@@ -27,7 +27,7 @@ const SelectBox: React.FC<Props> = ({value, disabled, options = [], onChange}) =
       onChange(value);
       setIsOpen(false);
     }
-  }, [onChange, setIsOpen, disabled, wrapperRef]); 
+  }, [onChange, setIsOpen, disabled]); 
 
   const currentText = React.useMemo(() => {
     return options.filter((option) => option.value === value)[0]?.text ?? options[0]?.text ?? '-'
@@ -37,7 +37,7 @@ const SelectBox: React.FC<Props> = ({value, disabled, options = [], onChange}) =
     if(wrapperRef.current && wrapperRef.current !== event.target && !wrapperRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
-  }, [setIsOpen]);
+  }, [setIsOpen, wrapperRef]);
 
   React.useLayoutEffect(() => {
     const body = document.body;
