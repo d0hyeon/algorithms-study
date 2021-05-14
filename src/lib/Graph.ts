@@ -1,3 +1,5 @@
+import Stack from "./Stack";
+
 class Vertex {
   key: string;
   next: Vertex | null;
@@ -193,6 +195,29 @@ class Graph<T = any> {
     }
 
     return this._getVertexRoute(fromVertex, toKey) as VertexRoute;
+  }
+  depthFirstSearch(findKey: string): Vertex | undefined {
+    const stack = new Stack<Vertex>();
+    const records: Vertex[] = [];
+    if(this.head) {
+      stack.push(this.head);
+      while(stack.size) {
+        const vertex = stack.pop();
+        console.log(vertex);
+        if(vertex!.key === findKey) {
+          return vertex;
+        }
+        records.push(vertex as Vertex);
+        let arc = vertex!.arc;
+        while(arc) {
+          if(!records.find(vertex => vertex.key === arc!.destination.key)) { // 이전에 탐색 된 Vertex가 아닌경우
+            stack.push(arc.destination);
+          }
+          arc = arc.next;
+        }
+      }
+    }
+    return undefined;
   }
   static routesFlat(vertexRoute: VertexRoute): Exclude<VertexRoute, 'child'>[][] {
     const result = [[]];
