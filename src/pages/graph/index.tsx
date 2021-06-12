@@ -1,9 +1,10 @@
 import React from 'react';
 import Graph from '@src/dataStructure/Graph';
-import { H1, H2, H3, P } from '@src/components/styles/text';
+import { H1, H2, H3, H4, P } from '@src/components/styles/text';
 import { Article, Button, Header, Section, Ul } from '@src/components/styles/common';
 import { Input } from '@src/components/styles/input';
 import Select, { Option } from '@src/components/Select';
+import Toggle from '@src/components/common/Toggle';
 import styled from '@emotion/styled';
 
 const MOCK_STATIONS = [
@@ -33,6 +34,8 @@ const GraphPage: React.FC = () => {
   const [arcTo, setArcTo] = React.useState<string>('');
   const [searchFrom, setSearchFrom] = React.useState<string>('');
   const [searchTo, setSearchTo] = React.useState<string>('');
+  const [dijkstraValue, setDijkstraValue] = React.useState<string>('');
+  const [dijkstraResult, setDijkstraResult] = React.useState<{[key: string]: number}>({});
 
   const [locals, setLocals] = React.useState<Option[]>(() => {
     return MOCK_STATIONS.map((value) => {
@@ -90,7 +93,15 @@ const GraphPage: React.FC = () => {
       alert('가능한 경로가 없습니다.');
     }
   }, [graph, searchTo, searchFrom, setSearchRoutes]);
-  
+
+  const searchDijkstra = React.useCallback(() => {
+    const result = graph.dijkstra(dijkstraValue);
+    if(result) {
+      setDijkstraResult(result);
+    } else {
+      alert('가능한 경로가 없습니다.');
+    }
+  }, [dijkstraValue, setDijkstraResult]);
 
   const handleChangeArcFrom = React.useCallback((value) => {
     setArcFrom(value);
@@ -104,6 +115,9 @@ const GraphPage: React.FC = () => {
   const handleChangeSearchTo = React.useCallback((value) => {
     setSearchTo(value);
   }, [setSearchTo]);
+  const handleChangeDijkstraValue = React.useCallback((value) => {
+    setDijkstraValue(value);
+  }, [setDijkstraValue]);
 
   React.useEffect(() => {
     const result = graph.dijkstra('강남');
@@ -135,11 +149,13 @@ const GraphPage: React.FC = () => {
               </InputEntity>
             </InputFields>
           </Header>
-          <Ul>
-            {locals.map(({text}) => (
-              <li key={text}>{text}</li>
-            ))}
-          </Ul>
+          <Toggle title={<H4>역 목록</H4>}>
+            <Ul>
+              {locals.map(({text}) => (
+                <li key={text}>{text}</li>
+              ))}
+            </Ul>
+          </Toggle>
         </Article>
         <Article>
           <Header>
@@ -153,30 +169,32 @@ const GraphPage: React.FC = () => {
               <Button onClick={appendArc} disabled={!arcFrom || !arcTo}>경로 추가</Button>
             </InputFields>
           </Header>
-          <HalfSection>
-            {Array(Math.ceil(arcs.length/20)).fill(0).map((_, idx) => {
-              let max = (idx+1) * 20;
-              const min = max - 20;
-              if(max > arcs.length) {
-                max = arcs.length;
-              }
-              
-              return (
-                <article key={idx}>
-                  <Ul>
-                    {Array(max-min).fill('').map((_, i) => {
-                      const [from, to] = arcs[min + i];
-                      return (
-                        <li key={`${from}-${to}`}>
-                          {from} → {to}
-                        </li>
-                      )
-                    })}
-                  </Ul>
-                </article>
-              )
-            })}
-          </HalfSection>
+          <Toggle title={<H4>경로 목록</H4>}>
+            <HalfSection>
+              {Array(Math.ceil(arcs.length/20)).fill(0).map((_, idx) => {
+                let max = (idx+1) * 20;
+                const min = max - 20;
+                if(max > arcs.length) {
+                  max = arcs.length;
+                }
+                
+                return (
+                  <article key={idx}>
+                    <Ul>
+                      {Array(max-min).fill('').map((_, i) => {
+                        const [from, to] = arcs[min + i];
+                        return (
+                          <li key={`${from}-${to}`}>
+                            {from} → {to}
+                          </li>
+                        )
+                      })}
+                    </Ul>
+                  </article>
+                )
+              })}
+            </HalfSection>
+          </Toggle>
         </Article>
       </HalfSection>
       <Section>
@@ -199,6 +217,26 @@ const GraphPage: React.FC = () => {
                   {!!idx && '→'} {text} (총 {distance}개역)
                 </span>
               ))}
+            </li>
+          ))}
+        </Ul>
+      </Section>
+      <Section>
+        <Header>
+          <H2>다익스트라 알고리즘</H2>
+          <P>
+            특정 역부터 모든 역을 가장 빨리 가는데에 지나치는 역 개수를 구합니다.
+          </P>
+          <br/><br/>
+          <InputFields>
+            <Select value={dijkstraValue} options={locals} onChange={handleChangeDijkstraValue} />
+            <Button onClick={searchDijkstra} disabled={!dijkstraValue}>시작</Button>
+          </InputFields>
+        </Header>
+        <Ul>
+          {Object.keys(dijkstraResult).map(key => (
+            <li key={`dijkstra-${key}-${dijkstraResult[key]}`}>
+              <strong>{key}</strong> : {dijkstraResult[key]}
             </li>
           ))}
         </Ul>
