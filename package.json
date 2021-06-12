@@ -51,6 +51,7 @@
     "@emotion/babel-plugin": "^11.1.2",
     "@emotion/babel-preset-css-prop": "^11.0.0",
     "@types/react-router-dom": "^5.1.7",
-    "react-app-rewired": "^2.1.8"
+    "react-app-rewired": "^2.1.8",
+    "resize-observer-polyfill": "^1.5.1"
   }
 }
