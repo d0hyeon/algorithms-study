@@ -15,7 +15,7 @@ class Heap {
     return (parentIndex * 2) + (isRight ? 2 : 1);
   }
   hasChild(parentIndex: number, isRight: boolean = false) {
-    return this.getChildIndex(parentIndex, isRight) > this.container.length;
+    return this.getChildIndex(parentIndex, isRight) < this.container.length;
   }
 
   add(value: number) {
