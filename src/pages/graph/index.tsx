@@ -1,5 +1,5 @@
 import React from 'react';
-import Graph from '@src/lib/Graph';
+import Graph from '@src/dataStructure/Graph';
 import { H1, H2, H3, P } from '@src/components/styles/text';
 import { Article, Button, Header, Section, Ul } from '@src/components/styles/common';
 import { Input } from '@src/components/styles/input';
@@ -105,10 +105,15 @@ const GraphPage: React.FC = () => {
     setSearchTo(value);
   }, [setSearchTo]);
 
+  React.useEffect(() => {
+    const result = graph.dijkstra('강남');
+    console.log(result);
+  }, [graph]);
+
   return (
     <>
       <Header>
-        <H1>그래프 자료구조를 다루어보자</H1>
+        <H1>그래프</H1>
       </Header>
       <Section>
         <Header>
