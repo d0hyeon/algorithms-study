@@ -1,3 +1,4 @@
+import Queue from "./Queue";
 import Stack from "./Stack";
 
 class Vertex {
@@ -135,15 +136,46 @@ class Graph<T = any> {
       vertexArc = vertexArc.next;
     }
   }
-  
-  get vertexs() {
-    const vertexArr = [];
-    let vertex = this.head;
-    while (vertex) {
-      vertexArr.push(vertex);
-      vertex = vertex.next;
+
+  dijkstra(key: string) {
+    const vertexDistances: {[key: string]: number} = {};
+    const visitedVertex: {[key: string]: Vertex} = {};
+    const queue = new Queue<Vertex>();
+    let fromVertex = this.head;
+    while(fromVertex) {
+      if(fromVertex.key === key) {
+        break;
+      }
+      fromVertex = fromVertex.next;
     }
-    return vertexArr;
+    if(!fromVertex) {
+      return;
+    }
+
+    vertexDistances[key] = 0;
+    queue.push(fromVertex);
+
+    while(!queue.isEmpty) {
+      const vertex = queue.pop() as Vertex;
+      visitedVertex[vertex.key] = vertex;
+      let arc = vertex.arc;
+      while(arc) {
+        if(!visitedVertex[arc.destination.key]) {
+          const targetDistance = vertexDistances[arc.destination.key] ?? Infinity;
+          const distanceToVertex = vertexDistances[key] + arc.distance;
+          if(distanceToVertex < targetDistance) {
+            vertexDistances[arc.destination.key] = distanceToVertex;
+            visitedVertex[arc.destination.key] = arc.destination;
+          } 
+
+          if(!queue.isContain((vertex) => vertex.key === arc?.destination.key)) {
+            queue.push(arc.destination);
+          }
+        }
+        arc = arc.next;
+      }
+    }
+    return vertexDistances;
   }
 
   private _getVertexRoute(vertex: Vertex, findKey = "", distance = 0, history: String[] = []): VertexRoute | null {
