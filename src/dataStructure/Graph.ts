@@ -162,10 +162,10 @@ class Graph<T = any> {
       while(arc) {
         if(!visitedVertex[arc.destination.key]) {
           const targetDistance = vertexDistances[arc.destination.key] ?? Infinity;
-          const distanceToVertex = vertexDistances[key] + arc.distance;
+          const distanceToVertex = vertexDistances[vertex.key] + arc.distance;
+          
           if(distanceToVertex < targetDistance) {
             vertexDistances[arc.destination.key] = distanceToVertex;
-            visitedVertex[arc.destination.key] = arc.destination;
           } 
 
           if(!queue.isContain((vertex) => vertex.key === arc?.destination.key)) {
