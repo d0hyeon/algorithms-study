@@ -9,7 +9,8 @@ type Menu = {
 }
 
 export const CATEGORIES: Menu[] = [
-  {title: 'Graph', url: '/graph', path: '/graph'}
+  {title: 'Graph', url: '/graph', path: '/graph'},
+  {title: 'Sort', url: '/sort', path: '/sort'}
 ]
 
 const Navigate: React.FC = () => {
