@@ -1,7 +1,7 @@
 import React from 'react';
 import Graph from '@src/dataStructure/Graph';
 import { H1, H2, H3, H4, P } from '@src/components/styles/text';
-import { Article, Button, Header, Section, Ul } from '@src/components/styles/common';
+import { Article, Button, Header, Section, Ul, InputFields, InputEntity, InpuUnit } from '@src/components/styles/common';
 import { Input } from '@src/components/styles/input';
 import Select, { Option } from '@src/components/Select';
 import Toggle from '@src/components/common/Toggle';
@@ -256,27 +256,7 @@ const HalfSection = styled(Section)`
 
     & ~ article {
       margin-top: 0 !important;
-    }
+    }import { InputEntity, InpuUnit } from '../../components/styles/common';
+
   }
-`;
-
-const InputEntity = styled.div`
-  display: flex;
-  align-items: center;
-  & ~ & {
-    margin-left: 50px;
-  }
-`;
-
-const InputFields = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  padding-bottom: 20px;
-`;
-
-const InpuUnit = styled.p`
-  padding: 0 10px;
-  font-size: 18px;
-  font-weight: bold;
 `;

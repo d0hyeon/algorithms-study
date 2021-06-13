@@ -88,4 +88,25 @@ export const CodeBlock = styled.pre`
   padding: 10px;
   font-size: 16px;
   font-family: 'Do Hyeon', sans-serif;
-`
+`;
+
+export const InputEntity = styled.div`
+  display: flex;
+  align-items: center;
+  & ~ & {
+    margin-left: 50px;
+  }
+`;
+
+export const InputFields = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-bottom: 20px;
+`;
+
+export const InpuUnit = styled.p`
+  padding: 0 10px;
+  font-size: 18px;
+  font-weight: bold;
+`;
