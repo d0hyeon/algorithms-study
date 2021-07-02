@@ -1,12 +1,20 @@
-import { Sort } from "./type";
+import type { SortPromise } from "./type";
 import bubbleSort from './bubbleSort';
 import selectionSort from "./selectionSort";
-const sort: Sort = (array, sortFunction) => {
-  return sortFunction([...array]);
+import insertionSort from './insertionSort';
+import quickSort from './quickSort';
+
+const sort: SortPromise = (array, sortFunction) => {
+  return new Promise((resolve) => {
+    const sortedArray = sortFunction([...array]);
+    resolve(sortedArray)
+  })
 }
 
 export {
   bubbleSort,
-  selectionSort
+  selectionSort,
+  insertionSort,
+  quickSort,
 }
 export default sort;

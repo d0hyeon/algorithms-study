@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, InputFields, Section, Button, Ul } from '@src/components/styles/common';
 import { H2, H1, P } from '@src/components/styles/text';
-import sort, {bubbleSort, selectionSort} from '@src/algorithm/sort';
+import sort, {bubbleSort, selectionSort, insertionSort, quickSort} from '@src/algorithm/sort';
 import Select, { Option } from '@src/components/Select';
 import Toggle from '@src/components/common/Toggle';
 
@@ -14,12 +14,16 @@ interface RecordPerformance {
 
 enum SortTypeEnum {
   BUBBLE = 'bubble',
-  SELECTION = 'selection'
+  SELECTION = 'selection',
+  INSERTION = 'insertion',
+  QUICK = 'quick'
 };
 
 const SORT_FUNC_MAP = {
   [SortTypeEnum.BUBBLE]: bubbleSort,
-  [SortTypeEnum.SELECTION]: selectionSort
+  [SortTypeEnum.SELECTION]: selectionSort,
+  [SortTypeEnum.INSERTION]: insertionSort,
+  [SortTypeEnum.QUICK]: quickSort
 }
 
 const createRandomNumber = (minRange: number = 10, maxRange: number = 100) => {
@@ -31,7 +35,7 @@ const Sort: React.FC = () => {
     const maxSize = createRandomNumber(500, 600);
     const array = [];
     for(let i = 0; i < maxSize; i ++) {
-      array[i] = createRandomNumber();
+      array[i] = createRandomNumber(0, 1000);
     }
     return array;
   }, []);  
@@ -76,9 +80,12 @@ const Sort: React.FC = () => {
   const handleClickButton = React.useCallback(() => {
     const [startName, endName] = [`start-${sortType}-sort`, `end-${sortType}-sort`];
     performance.mark(startName);
-    setSortedArray(sort(array, SORT_FUNC_MAP[sortType]));
-    performance.mark(endName);
-    performance.measure(sortType, startName, endName);
+    sort(array, SORT_FUNC_MAP[sortType])
+      .then((sortedArray) => {
+        setSortedArray(sortedArray);
+        performance.mark(endName);
+        performance.measure(sortType, startName, endName);
+      });
   }, [array, sortType, setSortedArray]);
 
   const handleChangeType = React.useCallback((type) => {
@@ -111,7 +118,9 @@ const Sort: React.FC = () => {
       </Header>
       <Section>
         <H2>배열</H2>
-        <P>{arrayString}</P>
+        <Toggle title={<P>원본 배열</P>}>
+          <P>{arrayString}</P>
+        </Toggle>
         {sortedArrayString && (
           <Toggle title={<P>정렬 후</P>}>
             <P>{sortedArrayString}</P>
