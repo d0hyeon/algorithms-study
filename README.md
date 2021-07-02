@@ -2,3 +2,4 @@
 
 ## 자료구조
 - [그래프](https://github.com/d0hyeon/algorithms-study/tree/master/src/pages/graph)
+- [정렬](https://github.com/d0hyeon/algorithms-study/tree/master/src/pages/sort)
